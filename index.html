@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>班级广告赞助</title>
+<style>
+  :root {
+    --black: #000000;
+    --near-black: #1d1d1f;
+    --light-gray: #f5f5f7;
+    --white: #ffffff;
+    --apple-blue: #0071e3;
+    --link-blue: #0066cc;
+    --bright-blue: #2997ff;
+    --text-secondary: rgba(0, 0, 0, 0.8);
+    --text-tertiary: rgba(0, 0, 0, 0.48);
+    --card-shadow: rgba(0, 0, 0, 0.22) 3px 5px 30px 0px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, "SF Pro Display", "PingFang SC", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+    color: var(--near-black);
+    background: var(--white);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ============ 导航（深色毛玻璃，滚动动态模糊） ============ */
+  .nav {
+    --nav-blur: 12px;
+    --nav-alpha: 0.68;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 48px;
+    background: rgba(0, 0, 0, var(--nav-alpha));
+    backdrop-filter: saturate(180%) blur(var(--nav-blur));
+    -webkit-backdrop-filter: saturate(180%) blur(var(--nav-blur));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 22px;
+  }
+  .nav-inner { width: 100%; max-width: 980px; display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { display: flex; align-items: center; gap: 8px; color: #fff; font-size: 15px; font-weight: 600; letter-spacing: -0.02em; text-decoration: none; }
+  .nav-logo .dot { width: 18px; height: 18px; border-radius: 50%; background: linear-gradient(135deg, #f5f5f7, #a1a1a6); }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a { color: rgba(255, 255, 255, 0.8); font-size: 12px; font-weight: 400; letter-spacing: -0.01em; text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: #fff; }
+
+  /* ============ Hero（纯黑，金额池大数字） ============ */
+  .hero {
+    background: var(--black);
+    color: var(--white);
+    text-align: center;
+    padding: 120px 24px 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .hero .eyebrow { font-size: 21px; font-weight: 400; letter-spacing: -0.01em; color: #a1a1a6; margin-bottom: 14px; }
+  .hero h1 { font-size: 64px; font-weight: 600; line-height: 1.07; letter-spacing: -0.03em; margin-bottom: 16px; }
+  .hero .sub { font-size: 24px; font-weight: 400; line-height: 1.19; letter-spacing: -0.01em; color: rgba(255, 255, 255, 0.8); margin-bottom: 56px; }
+  .hero .pool-value { font-size: 96px; font-weight: 600; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+  .hero .pool-value .currency { font-size: 52px; font-weight: 400; vertical-align: 22px; }
+  .hero .pool-label { font-size: 17px; font-weight: 400; letter-spacing: -0.01em; color: #a1a1a6; margin-top: 14px; }
+
+  /* ============ 通用 section ============ */
+  section { width: 100%; }
+  .container { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+  .section-head { text-align: center; margin-bottom: 56px; }
+  .section-head h2 { font-size: 40px; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; }
+  .section-head p { font-size: 17px; color: var(--text-tertiary); letter-spacing: -0.02em; margin-top: 10px; }
+
+  /* ============ 数据区（浅灰，超大数字） ============ */
+  .stats { background: var(--light-gray); padding: 110px 0; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; text-align: center; }
+  .stat-value { font-size: 56px; font-weight: 600; line-height: 1.07; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; color: var(--near-black); }
+  .stat-value .currency { font-size: 28px; font-weight: 400; vertical-align: 12px; }
+  .stat-label { font-size: 14px; font-weight: 400; letter-spacing: -0.01em; color: var(--text-tertiary); margin-top: 10px; }
+
+  /* ============ 流水明细（白，时间线） ============ */
+  .records { background: var(--white); padding: 110px 0; }
+  .timeline { max-width: 560px; margin: 0 auto; position: relative; padding-left: 28px; }
+  .timeline::before { content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 1px; background: #e8e8ed; }
+  .record { position: relative; display: flex; align-items: baseline; padding: 15px 0; }
+  .record .r-dot { position: absolute; left: -28px; top: 22px; width: 7px; height: 7px; border-radius: 50%; background: #d2d2d7; }
+  .record:last-child .r-dot { background: var(--apple-blue); }
+  .record .r-date { width: 64px; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; color: var(--near-black); font-variant-numeric: tabular-nums; }
+  .record .r-amount { flex: 1; text-align: right; font-size: 15px; font-weight: 400; letter-spacing: -0.01em; color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
+  .record .r-cum { width: 120px; text-align: right; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; color: var(--near-black); font-variant-numeric: tabular-nums; }
+  .record:last-child .r-cum { color: var(--apple-blue); }
+
+  /* ============ 名单（浅灰） ============ */
+  .members { background: var(--light-gray); padding: 110px 0; }
+  .members-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+  .member {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    background: var(--white);
+  }
+  .member .m-dot { width: 8px; height: 8px; border-radius: 50%; background: #d2d2d7; flex-shrink: 0; margin-top: 6px; }
+  .member .m-info { display: flex; flex-direction: column; gap: 4px; }
+  .member .m-name { font-size: 15px; letter-spacing: -0.01em; color: var(--near-black); }
+  .member .m-submit { font-size: 12px; color: var(--apple-blue); text-decoration: none; letter-spacing: -0.01em; }
+  .member .m-submit:hover { text-decoration: underline; }
+  .member .m-submit.disabled { color: var(--text-tertiary); }
+
+  /* ============ Footer ============ */
+  footer { background: var(--light-gray); padding: 48px 24px; text-align: center; }
+  footer .f-note { font-size: 12px; color: var(--text-tertiary); letter-spacing: -0.01em; line-height: 1.6; }
+  footer .f-links { margin-top: 14px; }
+  footer .f-links a { color: var(--link-blue); font-size: 12px; text-decoration: none; letter-spacing: -0.01em; }
+  footer .f-links a:hover { text-decoration: underline; }
+
+  /* ============ 区块切换动画（模糊 + 缩放 + 位移） ============ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(44px) scale(0.96);
+    filter: blur(14px);
+    transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 1s cubic-bezier(0.22, 1, 0.36, 1),
+                filter 1s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform, filter;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+
+  /* ============ 响应式 ============ */
+  @media (max-width: 834px) {
+    .hero h1 { font-size: 44px; }
+    .hero .pool-value { font-size: 64px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 44px 24px; }
+    .stat-value { font-size: 44px; }
+    .members-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .nav-links { display: none; }
+    .hero { padding: 96px 20px 88px; }
+    .hero h1 { font-size: 36px; }
+    .hero .pool-value { font-size: 52px; }
+    .section-head h2 { font-size: 32px; }
+    .members-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+  <!-- 导航 -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="#top"><span class="dot"></span><span id="nav-title">班级广告赞助</span></a>
+      <div class="nav-links">
+        <a href="#stats">数据</a>
+        <a href="#records">流水</a>
+        <a href="#members">名单</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="top">
+    <div class="eyebrow" id="hero-class">25级数智管理教改班</div>
+    <h1 id="hero-name">班级广告赞助</h1>
+    <div class="sub" id="hero-tagline">赞助进度 · 公开透明</div>
+    <div class="pool-value"><span class="currency">¥</span><span id="hero-pool">0</span></div>
+    <div class="pool-label">累积金额池</div>
+  </section>
+
+  <!-- 数据 -->
+  <section class="stats" id="stats">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2>一目了然</h2>
+        <p>每一笔赞助，都清清楚楚。</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat reveal">
+          <div class="stat-value"><span id="stat-records">0</span><span class="currency">笔</span></div>
+          <div class="stat-label">流水笔数</div>
+        </div>
+        <div class="stat reveal">
+          <div class="stat-value"><span id="stat-members">0</span><span class="currency">人</span></div>
+          <div class="stat-label">班级成员</div>
+        </div>
+        <div class="stat reveal">
+          <div class="stat-value"><span class="currency">¥</span><span id="stat-unit">0</span><span class="currency">/条</span></div>
+          <div class="stat-label">当前单价</div>
+        </div>
+        <div class="stat reveal">
+          <div class="stat-value"><span id="stat-start">—</span></div>
+          <div class="stat-label">记录起点</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 流水明细 -->
+  <section class="records" id="records">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2>赞助流水</h2>
+        <p>每一次累积，都有迹可循。</p>
+      </div>
+      <div class="timeline reveal" id="timeline"></div>
+    </div>
+  </section>
+
+  <!-- 名单 -->
+  <section class="members" id="members">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2>班级成员</h2>
+        <p>一起努力的每一个人。</p>
+      </div>
+      <div class="members-grid" id="members-grid"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="f-note" id="footer-note">数据最后更新于 2026-08-16</div>
+    <div class="f-links"><a href="#top">回到顶部</a></div>
+  </footer>
+
+<script>
+  function fmt(n) { return Number(n).toLocaleString('zh-CN'); }
+
+  async function load() {
+    let data;
+    try {
+      const res = await fetch('data.json');
+      data = await res.json();
+    } catch (e) {
+      console.error('无法加载 data.json（本地 file:// 打开会失败，请用 http 服务预览）', e);
+      return;
+    }
+    render(data);
+  }
+
+  function render(d) {
+    const s = d.site, sum = d.summary;
+
+    document.title = s.name;
+    document.getElementById('nav-title').textContent = s.name;
+    document.getElementById('hero-class').textContent = s.className;
+    document.getElementById('hero-name').textContent = s.name;
+    document.getElementById('hero-tagline').textContent = s.tagline;
+    const totalAmount = d.records.reduce((s, r) => s + r.amount, 0);
+    document.getElementById('hero-pool').textContent = fmt(totalAmount);
+    document.getElementById('footer-note').textContent = '数据最后更新于 ' + (s.updatedAt || '');
+
+    // 数据区
+    document.getElementById('stat-records').textContent = fmt(d.records.length);
+    document.getElementById('stat-members').textContent = fmt(d.students.length);
+    document.getElementById('stat-unit').textContent = fmt(s.unitPrice || 1);
+    if (d.records.length) {
+      document.getElementById('stat-start').textContent = d.records[0].date;
+    }
+
+    // 流水明细（累积前端自动累加）
+    const tl = document.getElementById('timeline');
+    tl.innerHTML = '';
+    let cum = 0;
+    d.records.forEach(r => {
+      cum += r.amount;
+      const row = document.createElement('div');
+      row.className = 'record';
+      row.innerHTML = `
+        <span class="r-dot"></span>
+        <span class="r-date">${r.date}</span>
+        <span class="r-amount">+¥${fmt(r.amount)}</span>
+        <span class="r-cum">¥${fmt(cum)}</span>
+      `;
+      tl.appendChild(row);
+    });
+
+    // 名单
+    const mg = document.getElementById('members-grid');
+    mg.innerHTML = '';
+    const submitUrl = s.submitUrl || '';
+    d.students.forEach(st => {
+      const item = document.createElement('div');
+      item.className = 'member';
+      const submitHtml = submitUrl
+        ? `<a class="m-submit" href="${submitUrl}" target="_blank" rel="noopener">提交截图 ↗</a>`
+        : `<span class="m-submit disabled">提交待开放</span>`;
+      item.innerHTML = `<span class="m-dot"></span><div class="m-info"><div class="m-name">${st.name}</div>${submitHtml}</div>`;
+      mg.appendChild(item);
+    });
+
+    initReveal();
+    initScrollEffects();
+  }
+
+  function initReveal() {
+    const els = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          en.target.classList.add('visible');
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    els.forEach(el => io.observe(el));
+  }
+
+  // ===== 滚动驱动效果：导航动态模糊 + hero 视差切换 =====
+  function initScrollEffects() {
+    const nav = document.querySelector('.nav');
+    const hero = document.querySelector('.hero');
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        const t = Math.min(y / 500, 1);
+        nav.style.setProperty('--nav-blur', (12 + t * 14).toFixed(1) + 'px');
+        nav.style.setProperty('--nav-alpha', (0.68 + t * 0.27).toFixed(3));
+        if (y < 800) {
+          const ht = Math.min(y / 650, 1);
+          hero.style.opacity = Math.max(1 - ht * 1.4, 0).toFixed(3);
+          hero.style.filter = 'blur(' + (ht * 10).toFixed(1) + 'px)';
+          hero.style.transform = 'translateY(' + (y * 0.25).toFixed(1) + 'px)';
+        }
+        ticking = false;
+      });
+    }, { passive: true });
+  }
+
+  load();
+</script>
+</body>
+</html>
