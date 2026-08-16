@@ -125,12 +125,18 @@
     opacity: 0;
     transform: translateY(44px) scale(0.96);
     filter: blur(14px);
+    -webkit-filter: blur(14px);
     transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
                 transform 1s cubic-bezier(0.22, 1, 0.36, 1),
                 filter 1s cubic-bezier(0.22, 1, 0.36, 1);
     will-change: opacity, transform, filter;
   }
-  .reveal.visible { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+    -webkit-filter: blur(0);
+  }
 
   /* ============ 响应式 ============ */
   @media (max-width: 834px) {
@@ -301,6 +307,11 @@
 
   function initReveal() {
     const els = document.querySelectorAll('.reveal');
+    // 兼容兜底：老 iOS Safari 没有 IntersectionObserver，直接显示所有元素，避免白屏
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(el => el.classList.add('visible'));
+      return;
+    }
     const io = new IntersectionObserver((entries) => {
       entries.forEach(en => {
         if (en.isIntersecting) {
@@ -329,6 +340,7 @@
           const ht = Math.min(y / 650, 1);
           hero.style.opacity = Math.max(1 - ht * 1.4, 0).toFixed(3);
           hero.style.filter = 'blur(' + (ht * 10).toFixed(1) + 'px)';
+          hero.style.webkitFilter = 'blur(' + (ht * 10).toFixed(1) + 'px)';
           hero.style.transform = 'translateY(' + (y * 0.25).toFixed(1) + 'px)';
         }
         ticking = false;
