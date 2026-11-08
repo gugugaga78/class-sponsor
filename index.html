@@ -235,16 +235,19 @@
     <div class="f-links"><a href="#top">回到顶部</a></div>
   </footer>
 
+<script src="data.js"></script>
 <script>
   function fmt(n) { return Number(n).toLocaleString('zh-CN'); }
 
   async function load() {
-    let data;
+    // 本地 file:// 打开时 fetch 会被浏览器拦截，优先用 data.js 内嵌数据兜底
+    let data = window.__DASHBOARD_DATA__;
+    if (data) { render(data); return; }
     try {
       const res = await fetch('data.json');
       data = await res.json();
     } catch (e) {
-      console.error('无法加载 data.json（本地 file:// 打开会失败，请用 http 服务预览）', e);
+      console.error('无法加载数据：data.js 缺失且 fetch(data.json) 失败', e);
       return;
     }
     render(data);

@@ -1,0 +1,194 @@
+window.__DASHBOARD_DATA__ = {
+  "site": {
+    "name": "班级广告赞助",
+    "tagline": "赞助进度 · 公开透明",
+    "className": "25级数智管理教改班",
+    "updatedAt": "2026-08-16",
+    "unitPrice": 1,
+    "submitUrl": "https://docs.qq.com/form/page/DVnBBVHhiRXhnSXFs?tdocapp_full_screen=1&templateId=25000&create_type=2&no_promotion=1&is_blank_or_template=blank"
+  },
+  "summary": {
+    "memberCount": 40,
+    "recordCount": 14
+  },
+  "records": [
+    {
+      "date": "6.17",
+      "amount": 64
+    },
+    {
+      "date": "6.22",
+      "amount": 54
+    },
+    {
+      "date": "6.25",
+      "amount": 50
+    },
+    {
+      "date": "6.29",
+      "amount": 40
+    },
+    {
+      "date": "7.2",
+      "amount": 46.5
+    },
+    {
+      "date": "7.6",
+      "amount": 50
+    },
+    {
+      "date": "7.13",
+      "amount": 40.5
+    },
+    {
+      "date": "7.16",
+      "amount": 36
+    },
+    {
+      "date": "7.20",
+      "amount": 71
+    },
+    {
+      "date": "7.27",
+      "amount": 42
+    },
+    {
+      "date": "7.29",
+      "amount": 32
+    },
+    {
+      "date": "8.3",
+      "amount": 35
+    },
+    {
+      "date": "8.10",
+      "amount": 38
+    },
+    {
+      "date": "8.12",
+      "amount": 40
+    }
+  ],
+  "students": [
+    {
+      "name": "肖欣钰"
+    },
+    {
+      "name": "刘诗琦"
+    },
+    {
+      "name": "王小敏"
+    },
+    {
+      "name": "万义婷"
+    },
+    {
+      "name": "宋若绮"
+    },
+    {
+      "name": "吕冰洁"
+    },
+    {
+      "name": "杨雅思"
+    },
+    {
+      "name": "苏津霖"
+    },
+    {
+      "name": "肖福興"
+    },
+    {
+      "name": "谭梓琦"
+    },
+    {
+      "name": "袁惠玲"
+    },
+    {
+      "name": "王麒麒"
+    },
+    {
+      "name": "黎寒苇"
+    },
+    {
+      "name": "关名朗"
+    },
+    {
+      "name": "肖雯"
+    },
+    {
+      "name": "孙英杰"
+    },
+    {
+      "name": "刘裕航"
+    },
+    {
+      "name": "周智航"
+    },
+    {
+      "name": "韦敦亿"
+    },
+    {
+      "name": "赵诗憬"
+    },
+    {
+      "name": "易李江"
+    },
+    {
+      "name": "潘晋瑶"
+    },
+    {
+      "name": "黎娉婷"
+    },
+    {
+      "name": "邓晓莹"
+    },
+    {
+      "name": "吴雨涵"
+    },
+    {
+      "name": "刘冰洁"
+    },
+    {
+      "name": "房家宝"
+    },
+    {
+      "name": "明佳"
+    },
+    {
+      "name": "谭佳琳"
+    },
+    {
+      "name": "犹雯"
+    },
+    {
+      "name": "李辰鹏"
+    },
+    {
+      "name": "邵婷婷"
+    },
+    {
+      "name": "程小芸"
+    },
+    {
+      "name": "刘一凝"
+    },
+    {
+      "name": "张玲"
+    },
+    {
+      "name": "李翔益"
+    },
+    {
+      "name": "潘秋玲"
+    },
+    {
+      "name": "王楠"
+    },
+    {
+      "name": "赵泉"
+    },
+    {
+      "name": "尚高翔"
+    }
+  ]
+};
