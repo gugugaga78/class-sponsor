@@ -240,17 +240,22 @@
   function fmt(n) { return Number(n).toLocaleString('zh-CN'); }
 
   async function load() {
-    // 本地 file:// 打开时 fetch 会被浏览器拦截，优先用 data.js 内嵌数据兜底
-    let data = window.__DASHBOARD_DATA__;
-    if (data) { render(data); return; }
+    // http 环境（含线上 GitHub Pages）：永远以 data.json 为准
+    if (location.protocol !== 'file:') {
+      try {
+        const res = await fetch('data.json');
+        render(await res.json());
+        return;
+      } catch (e) { console.error('fetch(data.json) 失败', e); }
+    }
+    // 本地 file:// 双击打开：fetch 会被浏览器拦截，用 data.js 内嵌数据兜底
+    if (window.__DASHBOARD_DATA__) { render(window.__DASHBOARD_DATA__); return; }
     try {
       const res = await fetch('data.json');
-      data = await res.json();
+      render(await res.json());
     } catch (e) {
-      console.error('无法加载数据：data.js 缺失且 fetch(data.json) 失败', e);
-      return;
+      console.error('无法加载数据：请运行 python sync_data.py 生成 data.js', e);
     }
-    render(data);
   }
 
   function render(d) {
